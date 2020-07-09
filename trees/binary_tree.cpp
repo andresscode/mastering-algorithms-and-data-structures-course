@@ -1,5 +1,6 @@
 #include <iostream>
 #include <stack>
+#include <queue>
 
 using namespace std;
 
@@ -9,7 +10,9 @@ struct Node {
     struct Node *right;
 };
 
-struct Node *init(int a[], int i, int n);
+int get_int(const char *message, int x);
+
+void init(struct Node *root);
 
 void display_pre_order(struct Node *p);
 
@@ -18,13 +21,13 @@ void display_in_order(struct Node *p);
 void display_post_order(struct Node *p);
 
 int main() {
-  int a[] = {1, 2, 3, 4, 5, 6, 7};
-  struct Node *p = init(a, 0, 7);
-  display_pre_order(p);
+  struct Node root{};
+  init(&root);
+  display_pre_order(&root);
   printf("\n");
-  display_in_order(p);
+  display_in_order(&root);
   printf("\n");
-  display_post_order(p);
+  display_post_order(&root);
   return 0;
 }
 
@@ -61,15 +64,38 @@ void display_pre_order(struct Node *p) {
   }
 }
 
-struct Node *init(int a[], int i, int n) {
-  if (i < n) {
-    auto *p = new struct Node;
-    p->data = a[i];
-    int tmp = i * 2 + 1;
-    p->left = init(a, tmp, n);
-    p->right = init(a, tmp + 1, n);
-    return p;
+void init(struct Node *root) {
+  queue<Node *> q;
+  struct Node *p, *t;
+  int x;
+  root->data = get_int("Enter root", 0);
+  root->left = root->right = nullptr;
+  p = root;
+  while(p) {
+    x = get_int("Enter left", p->data);
+    if (x != -1) {
+      t = new struct Node;
+      t->data = x;
+      t->left = t->right = nullptr;
+      p->left = t;
+      q.push(t);
+    }
+    x = get_int("Enter right", p->data);
+    if (x != -1) {
+      t = new struct Node;
+      t->data = x;
+      t->left = t->right = nullptr;
+      p->right = t;
+      q.push(t);
+    }
+    p = q.front();
+    q.pop();
   }
-  return nullptr;
 }
 
+int get_int(const char *message, int x) {
+  int y;
+  printf("%s for %d\t", message, x);
+  scanf("%d", &y);
+  return y;
+}
