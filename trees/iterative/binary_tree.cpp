@@ -33,17 +33,43 @@ int main() {
 
 void display_post_order(struct Node *p) {
   if (p) {
-    display_post_order(p->left);
-    display_post_order(p->right);
-    printf("%d ", p->data);
+    stack<Node *> s;
+    long int tmp;
+    struct Node *t = p;
+    while (t || !s.empty()) {
+      if (t) {
+        s.push(t);
+        t = t->left;
+      } else {
+        tmp = (long int) s.top();
+        s.pop();
+        if (tmp > 0) {
+          s.push((struct Node *) -tmp);
+          t = ((struct Node *) tmp)->right;
+        } else {
+          printf("%d ", ((struct Node *) -tmp)->data);
+          t = nullptr;
+        }
+      }
+    }
   }
 }
 
 void display_in_order(struct Node *p) {
   if (p) {
-    display_in_order(p->left);
-    printf("%d ", p->data);
-    display_in_order(p->right);
+    stack<Node *> s;
+    struct Node *t = p;
+    while (t || !s.empty()) {
+      if (!t) {
+        t = s.top();
+        s.pop();
+        printf("%d ", t->data);
+        t = t->right;
+      } else {
+        s.push(t);
+        t = t->left;
+      }
+    }
   }
 }
 
