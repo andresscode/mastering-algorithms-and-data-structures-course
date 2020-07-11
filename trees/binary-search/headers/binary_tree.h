@@ -59,7 +59,7 @@ void pre_order(struct TreeNode *root)
 {
   if (root)
   {
-    printf("%d ", root->data);
+    printf("%3d ", root->data);
     pre_order(root->left);
     pre_order(root->right);
   }
@@ -70,7 +70,7 @@ void in_order(struct TreeNode *root)
   if (root)
   {
     in_order(root->left);
-    printf("%d ", root->data);
+    printf("%3d ", root->data);
     in_order(root->right);
   }
 }
@@ -81,7 +81,7 @@ void post_order(struct TreeNode *root)
   {
     post_order(root->left);
     post_order(root->right);
-    printf("%d ", root->data);
+    printf("%3d ", root->data);
   }
 }
 
