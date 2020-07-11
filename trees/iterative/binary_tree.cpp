@@ -20,6 +20,10 @@ void display_in_order(struct Node *p);
 
 void display_post_order(struct Node *p);
 
+void display_level_order(struct Node *root);
+
+void leaf_and_not_leaf_nodes(struct Node * root);
+
 int main() {
   struct Node root{};
   init(&root);
@@ -28,7 +32,55 @@ int main() {
   display_in_order(&root);
   printf("\n");
   display_post_order(&root);
+  printf("\n");
+  display_level_order(&root);
+  printf("\n");
+  leaf_and_not_leaf_nodes(&root);
   return 0;
+}
+
+
+void leaf_and_not_leaf_nodes(struct Node * root) {
+  int count[] = {0, 0};
+  if (root) {
+    stack<Node *> s;
+    s.push(root);
+    struct Node *tmp;
+    while (!s.empty()) {
+      tmp = s.top();
+      s.pop();
+      if (tmp->right)
+        s.push(tmp->right);
+      if (tmp->left)
+        s.push(tmp->left);
+      if (!tmp->left && !tmp->right)
+        count[0]++;
+      else
+        count[1]++;
+    }
+  }
+  printf("leaf=%d\nnot-leaf=%d", count[0], count[1]);
+}
+
+void display_level_order(struct Node *root) {
+  if (root) {
+    queue<Node *> q;
+    struct Node *p = root;
+    q.push(p);
+    printf("%d ", p->data);
+    while (!q.empty()) {
+      p = q.front();
+      q.pop();
+      if (p->left) {
+        q.push(p->left);
+        printf("%d ", p->left->data);
+      }
+      if (p->right) {
+        q.push(p->right);
+        printf("%d ", p->right->data);
+      }
+    }
+  }
 }
 
 void display_post_order(struct Node *p) {
