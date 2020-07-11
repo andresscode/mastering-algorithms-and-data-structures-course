@@ -59,8 +59,8 @@ void pre_order(struct TreeNode *root)
 {
   if (root)
   {
-    pre_order(root->left);
     printf("%d ", root->data);
+    pre_order(root->left);
     pre_order(root->right);
   }
 }
@@ -80,8 +80,8 @@ void post_order(struct TreeNode *root)
   if (root)
   {
     post_order(root->left);
-    printf("%d ", root->data);
     post_order(root->right);
+    printf("%d ", root->data);
   }
 }
 
