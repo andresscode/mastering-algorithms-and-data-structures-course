@@ -6,12 +6,25 @@ struct TreeNode *binary_search(struct TreeNode *root, int x);
 
 int insert(struct TreeNode *root, int x);
 
+struct TreeNode *delete(struct TreeNode *p, int x);
+
+int leaf(struct TreeNode *p);
+
+int height(struct TreeNode *p);
+
+struct TreeNode *ancestor(struct TreeNode *p);
+
+struct TreeNode *successor(struct TreeNode *p);
+
 void display(struct TreeNode *root);
 
 int main()
 {
   struct TreeNode *root = create((int[]) {5, 9, 12, 22, 25, 26, 40}, 0, 6);
   printf("inserted=%d\n", insert(root, 10));
+  display(root);
+  delete(root, 5);
+  printf("\n");
   display(root);
   return 0;
 }
@@ -69,6 +82,72 @@ int insert(struct TreeNode *root, int x)
   else
     t->right = new;
   return 1;
+}
+
+struct TreeNode *delete(struct TreeNode *p, int x)
+{
+  if (!p)
+    return NULL;
+  if (p->data == x)
+  {
+    if (leaf(p))
+    {
+      free(p);
+      return NULL;
+    }
+    else
+    {
+      if (height(p->left) > height(p->right))
+      {
+        p->data = ancestor(p->left)->data;
+        p->left = delete(p->left, p->data);
+      }
+      else
+      {
+        p->data = successor(p->right)->data;
+        p->right = delete(p->right, p->data);
+      }
+    }
+  }
+  else
+  {
+    if (p->data > x)
+      p->left = delete(p->left, x);
+    else
+      p->right = delete(p->right, x);
+  }
+  return p;
+}
+
+int leaf(struct TreeNode *p)
+{
+  return !p->left && !p->right ? 1 : 0;
+}
+
+int height(struct TreeNode *p)
+{
+  if (!p)
+    return 0;
+  int x = height(p->left);
+  int y = height(p->right);
+  if (x > y)
+    return x + 1;
+  else
+    return y + 1;
+}
+
+struct TreeNode *ancestor(struct TreeNode *p)
+{
+  if (!p->right)
+    return p;
+  return ancestor(p->right);
+}
+
+struct TreeNode *successor(struct TreeNode *p)
+{
+  if (!p->left)
+    return p;
+  return ancestor(p->left);
 }
 
 void display(struct TreeNode *root)
