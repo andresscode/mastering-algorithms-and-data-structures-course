@@ -43,13 +43,31 @@ struct Node *right_left_rotation(struct Node *p);
 int main()
 {
   struct Tree t = {NULL};
-  insert(&t, 1);
-  insert(&t, 3);
-  insert(&t, 2);
-  insert(&t, 5);
-  insert(&t, 4);
-  insert(&t, 7);
-  insert(&t, 6);
+  insert(&t, 11);
+  display(t);
+  printf("\n");
+  printf("\n");
+  insert(&t, 20);
+  display(t);
+  printf("\n");
+  printf("\n");
+  insert(&t, 30);
+  display(t);
+  printf("\n");
+  printf("\n");
+  insert(&t, 25);
+  display(t);
+  printf("\n");
+  printf("\n");
+  insert(&t, 28);
+  display(t);
+  printf("\n");
+  printf("\n");
+  insert(&t, 27);
+  display(t);
+  printf("\n");
+  printf("\n");
+  insert(&t, 10);
   display(t);
   return 0;
 }
