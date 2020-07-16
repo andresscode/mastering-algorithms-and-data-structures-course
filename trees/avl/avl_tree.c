@@ -16,6 +16,8 @@ struct Tree
 
 void display(struct Tree t);
 
+void format_display(struct Tree t);
+
 void pre_order(const struct Node *root);
 
 void in_order(const struct Node *root);
@@ -40,36 +42,93 @@ struct Node *right_rotation(struct Node *p);
 
 struct Node *right_left_rotation(struct Node *p);
 
+struct Node *delete(struct Node *p, int x);
+
+int leaf(struct Node *p);
+
+struct Node *ancestor(struct Node *p);
+
+struct Node *successor(struct Node *p);
+
 int main()
 {
   struct Tree t = {NULL};
   insert(&t, 11);
-  display(t);
-  printf("\n");
-  printf("\n");
+  format_display(t);
   insert(&t, 20);
-  display(t);
-  printf("\n");
-  printf("\n");
+  format_display(t);
   insert(&t, 30);
-  display(t);
-  printf("\n");
-  printf("\n");
+  format_display(t);
   insert(&t, 25);
-  display(t);
-  printf("\n");
-  printf("\n");
+  format_display(t);
   insert(&t, 28);
-  display(t);
-  printf("\n");
-  printf("\n");
+  format_display(t);
   insert(&t, 27);
-  display(t);
-  printf("\n");
-  printf("\n");
+  format_display(t);
   insert(&t, 10);
-  display(t);
+  format_display(t);
+  t.root = delete(t.root, 11);
+  format_display(t);
+  t.root = delete(t.root, 20);
+  format_display(t);
+  t.root = delete(t.root, 10);
+  format_display(t);
   return 0;
+}
+
+struct Node *delete(struct Node *p, int x)
+{
+  if (!p)
+    return NULL;
+  if (p->data == x)
+  {
+    if (leaf(p))
+    {
+      free(p);
+      return NULL;
+    }
+    else
+    {
+      if (height(p->left) > height(p->right))
+      {
+        p->data = ancestor(p->left)->data;
+        p->left = delete(p->left, p->data);
+      }
+      else
+      {
+        p->data = successor(p->right)->data;
+        p->right = delete(p->right, p->data);
+      }
+    }
+  }
+  else
+  {
+    if (p->data > x)
+      p->left = delete(p->left, x);
+    else
+      p->right = delete(p->right, x);
+  }
+  p->height = height(p);
+  return balance(p);
+}
+
+int leaf(struct Node *p)
+{
+  return !p->left && !p->right ? 1 : 0;
+}
+
+struct Node *ancestor(struct Node *p)
+{
+  if (!p->right)
+    return p;
+  return ancestor(p->right);
+}
+
+struct Node *successor(struct Node *p)
+{
+  if (!p->left)
+    return p;
+  return ancestor(p->left);
 }
 
 void insert(struct Tree *t, int x)
@@ -187,6 +246,8 @@ int balance_factor(const struct Node *p)
 
 int height(const struct Node *p)
 {
+  if (!p)
+    return -1;
   int x, y;
   x = p->left ? p->left->height + 1 : 0;
   y = p->right ? p->right->height + 1 : 0;
@@ -233,4 +294,11 @@ void post_order(const struct Node *root)
     post_order(root->right);
     printf("%2d-%d-%d ", root->data, root->height, balance_factor(root));
   }
+}
+
+void format_display(struct Tree t)
+{
+  display(t);
+  printf("\n");
+  printf("\n");
 }
