@@ -1,6 +1,5 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include <math.h>
 
 struct Heap
 {
@@ -27,7 +26,7 @@ int main()
   init_array(&h, (int[]) {1, 2, 3, 4, 5, 6, 7}, 7);
   max_heap(&h);
   pre_order(h, 0);
-  printf("\ndeleted=%d", delete(&h, 7));
+  printf("\ndeleted=%d", delete(&h, 4));
   printf("\n");
   pre_order(h, 0);
   return 0;
@@ -75,10 +74,32 @@ int delete(struct Heap *h, int x)
     while (h->a[i] != x && i++ < h->i);
     if (i < h->i)
     {
-      for (int j = i; j < h->i - 1; ++j)
+      int deleted = i;
+      int tmp, l, r;
+      do
+      {
+        tmp = -1;
+        l = i * 2 + 1 < h->i ? i * 2 + 1 : -1;
+        r = i * 2 + 2 < h->i ? i * 2 + 2 : -1;
+        if (l != -1 && r != -1)
+          tmp = h->a[l] > h->a[r] ? l : r;
+        else if (l != -1)
+          tmp = l;
+        else if (r != -1)
+          tmp = r;
+        if (tmp != -1)
+        {
+          h->a[i] = h->a[tmp];
+          i = tmp;
+        }
+      } while (tmp != -1);
+      tmp = --h->i;
+      for (int j = i; j < h->i; ++j)
         h->a[j] = h->a[j + 1];
-      h->i--;
-      return i;
+      h->i = i;
+      for (int k = i; k < tmp; ++k)
+        insert(h, h->a[k]);
+      return deleted;
     }
   }
   return -1;
