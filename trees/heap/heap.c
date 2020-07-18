@@ -18,6 +18,8 @@ void insert(struct Heap *h, int x);
 
 int delete(struct Heap *h, int x);
 
+void sort(struct Heap *h);
+
 void pre_order(struct Heap h, int root);
 
 int main()
@@ -26,9 +28,10 @@ int main()
   init_array(&h, (int[]) {1, 2, 3, 4, 5, 6, 7}, 7);
   max_heap(&h);
   pre_order(h, 0);
-  printf("\ndeleted=%d", delete(&h, 4));
   printf("\n");
-  pre_order(h, 0);
+  sort(&h);
+  for (int i = 0; i < h.n; ++i)
+    printf("%d ", h.a[i]);
   return 0;
 }
 
@@ -103,6 +106,34 @@ int delete(struct Heap *h, int x)
     }
   }
   return -1;
+}
+
+void sort(struct Heap *h)
+{
+  int j, k, tmp;
+  for (int i = 0; i < h->n; ++i)
+  {
+    int d = h->a[0];
+    h->a[0] = h->a[h->i - 1];
+    k = 0;
+    j = 1;
+    while (j < h->i - 1)
+    {
+      if (h->a[j] < h->a[j + 1])
+        j++;
+      if (h->a[j] > h->a[k])
+      {
+        tmp = h->a[j];
+        h->a[j] = h->a[k];
+        h->a[k] = tmp;
+        k = j;
+        j = j * 2 + 1;
+      }
+      else
+        break;
+    }
+    h->a[--h->i] = d;
+  }
 }
 
 void pre_order(struct Heap h, int root)
