@@ -23,6 +23,8 @@ int contains(struct HashTable t, int x);
 
 void delete(struct HashTable *t, int x);
 
+void display(struct HashTable t);
+
 int main()
 {
   struct HashTable t;
@@ -44,17 +46,7 @@ int main()
   insert(&t, 10);
   delete(&t, 10);
   delete(&t, 22);
-  struct Node *p;
-  for (int i = 0; i < t.size; ++i)
-  {
-    printf("\nroot=%d\n", i);
-    p = t.table[i];
-    while (p)
-    {
-      printf("%d ", p->data);
-      p = p->next;
-    }
-  }
+  display(t);
   return 0;
 }
 
@@ -138,5 +130,20 @@ void delete(struct HashTable *t, int x)
     }
     q = p;
     p = p->next;
+  }
+}
+
+void display(struct HashTable t)
+{
+  struct Node *p;
+  for (int i = 0; i < t.size; ++i)
+  {
+    printf("\nroot=%d\n", i);
+    p = t.table[i];
+    while (p)
+    {
+      printf("%d ", p->data);
+      p = p->next;
+    }
   }
 }
