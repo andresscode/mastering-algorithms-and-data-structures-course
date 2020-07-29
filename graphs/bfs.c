@@ -40,7 +40,9 @@ void bfs(int *a, int n, int root)
     int i, j;
     for (i = 0; i < n; ++i)
       b[i] = 0;
+    printf("%d ", root + 1);
     enqueue(&q, root);
+    b[root]++;
     while (!is_empty(q))
     {
       i = dequeue(&q);
